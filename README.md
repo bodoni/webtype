@@ -1,6 +1,6 @@
 # WOFF [![Package][package-img]][package-url] [![Documentation][documentation-img]][documentation-url] [![Build][build-img]][build-url]
 
-The package provide a parser for fonts in Web Open Font Format (WOFF).
+The package provide a parser for fonts in Web Open Font Format.
 
 ## Contribution
 

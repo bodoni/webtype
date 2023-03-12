@@ -1,13 +1,13 @@
 [package]
-name = "woff"
+name = "webtype"
 version = "0.0.1"
 edition = "2021"
 license = "Apache-2.0/MIT"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
-description = "The package provides a parser for fonts in Web Open Font Format (WOFF)."
-documentation = "https://docs.rs/truetype"
-homepage = "https://github.com/bodoni/woff"
-repository = "https://github.com/bodoni/woff"
+description = "The package provides a parser for fonts in Web Open Font Format."
+documentation = "https://docs.rs/webtype"
+homepage = "https://github.com/bodoni/webtype"
+repository = "https://github.com/bodoni/webtype"
 readme = "README.md"
 categories = ["parsing"]
 keywords = ["font", "typeface", "typography", "woff"]

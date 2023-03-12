@@ -10,4 +10,7 @@ homepage = "https://github.com/bodoni/webtype"
 repository = "https://github.com/bodoni/webtype"
 readme = "README.md"
 categories = ["parsing"]
-keywords = ["font", "typeface", "typography", "woff"]
+keywords = ["font", "typeface", "typography", "woff", "woff2"]
+
+[dependencies]
+opentype = "0.24.12"

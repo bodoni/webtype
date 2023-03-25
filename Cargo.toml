@@ -14,3 +14,4 @@ keywords = ["font", "typeface", "typography", "woff", "woff2"]
 
 [dependencies]
 opentype = "0.24.12"
+typeface = "0"

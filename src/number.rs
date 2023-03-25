@@ -29,3 +29,19 @@ fn parse<T: Tape>(tape: &mut T) -> Result<u32> {
     }
     error!("found a malformed number")
 }
+
+#[cfg(test)]
+mod tests {
+    use std::io::Cursor;
+
+    macro_rules! ok(($result:expr) => ($result.unwrap()));
+
+    #[test]
+    fn parse() {
+        let mut tape = Cursor::new(&[0x3F]);
+        assert_eq!(ok!(super::parse(&mut tape)), 63);
+
+        let mut tape = Cursor::new(&[0x80, 0x3F]);
+        assert!(super::parse(&mut tape).is_err());
+    }
+}

@@ -2,11 +2,13 @@
 //!
 //! [1]: https://www.w3.org/TR/WOFF2/#woff20Header
 
+use opentype::truetype::Tag;
+
 table! {
     #[doc = "A file header."]
     #[derive(Copy)]
     pub Header {
-        signature                  (u32) = { 0x774F4632 }, // signature
+        signature                  (Tag) = { Tag(*b"wOF2") }, // signature
         flavor                     (u32), // flavor
         size                       (u32), // length
         table_count                (u16), // numTables

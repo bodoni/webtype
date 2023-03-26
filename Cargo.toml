@@ -14,5 +14,5 @@ keywords = ["font", "typeface", "typography", "woff", "woff2"]
 
 [dependencies]
 brotli-decompressor = "2"
-opentype = "0.24.12"
+opentype = { version = "0.24.12", features = ["ignore-invalid-checksums"] }
 typeface = "0"

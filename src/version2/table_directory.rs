@@ -2,6 +2,7 @@
 //!
 //! [1]: https://www.w3.org/TR/WOFF2/#table_dir_format
 
+use opentype::truetype::OffsetTable;
 use opentype::truetype::Tag;
 
 use crate::number::v32;
@@ -42,6 +43,32 @@ table! {
 }
 
 impl TableDirectory {
+    /// Convert to an offset table.
+    pub fn as_offset_table(&self, file_header: &FileHeader) -> OffsetTable {
+        use opentype::truetype::offset_table::{Header, Record};
+
+        OffsetTable {
+            header: Header {
+                version: file_header.flavor,
+                table_count: file_header.table_count,
+                ..Default::default()
+            },
+            records: self
+                .iter()
+                .scan(0, |offset, record| {
+                    let record = Record {
+                        tag: record.tag(),
+                        offset: *offset,
+                        size: record.uncompressed_size() as u32,
+                        ..Default::default()
+                    };
+                    *offset += record.size;
+                    Some(record)
+                })
+                .collect(),
+        }
+    }
+
     /// Decompress all tables.
     pub fn decompress<T: Tape>(&self, mut tape: T, file_header: &FileHeader) -> Result<Vec<u8>> {
         let size = self.iter().map(|record| record.uncompressed_size()).sum();

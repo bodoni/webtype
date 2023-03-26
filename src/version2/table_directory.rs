@@ -5,6 +5,7 @@
 use opentype::truetype::Tag;
 
 use crate::number::v32;
+use crate::version2::file_header::FileHeader;
 use crate::{Result, Tape, Walue};
 
 const TAG_MASK: u8 = 0b0011_1111;
@@ -42,23 +43,30 @@ table! {
 
 impl TableDirectory {
     /// Decompress all tables.
-    pub fn decompress<T: Tape>(&self, mut tape: T) -> Result<Vec<u8>> {
+    pub fn decompress<T: Tape>(&self, mut tape: T, file_header: &FileHeader) -> Result<Vec<u8>> {
         let size = self.iter().map(|record| record.uncompressed_size()).sum();
+        let position = tape.position()?;
         let mut data = Vec::with_capacity(size);
         brotli_decompressor::BrotliDecompress(&mut tape, &mut data)?;
+        let size = (tape.position()? - position) as usize;
+        if file_header.compressed_data_size as usize + 1 != size {
+            raise!(
+                "found malformed uncompressed data ({} != {size}",
+                file_header.compressed_data_size,
+            );
+        }
         Ok(data)
     }
 }
 
 dereference! { TableDirectory::records => [Record] }
 
-impl Walue<'static> for TableDirectory {
-    type Parameter = usize;
+impl<'l> Walue<'l> for TableDirectory {
+    type Parameter = &'l FileHeader;
 
-    fn read<T: Tape>(tape: &mut T, table_count: usize) -> Result<Self> {
-        Ok(TableDirectory {
-            records: tape.take_given(table_count)?,
-        })
+    fn read<T: Tape>(tape: &mut T, file_header: &'l FileHeader) -> Result<Self> {
+        let records = tape.take_given(file_header.table_count as usize)?;
+        Ok(TableDirectory { records })
     }
 }
 

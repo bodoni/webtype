@@ -4,6 +4,7 @@
 
 pub mod table_directory;
 
-mod header;
+mod file_header;
 
-pub use header::Header;
+pub use file_header::FileHeader;
+pub use table_directory::TableDirectory;

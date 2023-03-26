@@ -2,7 +2,7 @@
 
 pub extern crate opentype;
 
-#[macro_use(error, raise, table)]
+#[macro_use(error, table)]
 extern crate typeface;
 
 pub mod version1;

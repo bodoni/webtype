@@ -7,7 +7,7 @@ use opentype::truetype::Tag;
 table! {
     #[doc = "A file header."]
     #[derive(Copy)]
-    pub Header {
+    pub FileHeader {
         signature                  (Tag) = { Tag(*b"wOFF") }, // signature
         flavor                     (u32), // flavor
         size                       (u32), // length

@@ -2,6 +2,6 @@
 //!
 //! [1]: https://www.w3.org/TR/WOFF/
 
-mod header;
+mod file_header;
 
-pub use header::Header;
+pub use file_header::FileHeader;

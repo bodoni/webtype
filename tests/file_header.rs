@@ -12,5 +12,7 @@ mod noto_naskh_arabic {
         assert_eq!(table.major_version, 1);
         assert_eq!(table.minor_version, 0);
         assert_eq!(table.table_count, 17);
+        assert_eq!(table.uncompressed_data_size, 253_268);
+        assert_eq!(table.compressed_data_size, 92_474);
     }
 }

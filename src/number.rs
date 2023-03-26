@@ -3,7 +3,7 @@ use crate::{Result, Tape, Value};
 /// A variable-size u32.
 #[allow(non_camel_case_types)]
 #[derive(Clone, Copy, Debug, Default)]
-pub struct v32(u32);
+pub struct v32(pub u32);
 
 impl Value for v32 {
     #[inline]
@@ -37,11 +37,22 @@ mod tests {
     macro_rules! ok(($result:expr) => ($result.unwrap()));
 
     #[test]
-    fn parse() {
-        let mut tape = Cursor::new(&[0x3F]);
-        assert_eq!(ok!(super::parse(&mut tape)), 63);
-
+    fn parse_failure() {
         let mut tape = Cursor::new(&[0x80, 0x3F]);
         assert!(super::parse(&mut tape).is_err());
+    }
+
+    #[test]
+    fn parse_success() {
+        macro_rules! test(
+            ($input:expr, $output:expr) => (
+                let mut tape = Cursor::new($input);
+                assert_eq!(ok!(super::parse(&mut tape)), $output);
+            );
+        );
+
+        test!(&[0], 0);
+        test!(&[0x3F], 63);
+        test!(&[0x81, 0], 128);
     }
 }

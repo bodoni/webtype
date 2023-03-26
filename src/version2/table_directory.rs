@@ -7,7 +7,7 @@ use opentype::truetype::Tag;
 use crate::number::v32;
 use crate::{Result, Tape, Walue};
 
-const TAG_MASK: u8 = 0b00111111;
+const TAG_MASK: u8 = 0b0011_1111;
 
 /// A table directory.
 pub struct TableDirectory {
@@ -28,9 +28,9 @@ table! {
             }
         },
 
-        uncompressed_size (v32), // origLength
+        uncompressed_untransformed_size (v32), // origLength
 
-        compressed_size (Option<v32>) |this, tape| { // transformLength
+        uncompressed_transformed_size (Option<v32>) |this, tape| { // transformLength
             if this.flags & !TAG_MASK > 0 {
                 Ok(Some(tape.take()?))
             } else {
@@ -39,6 +39,18 @@ table! {
         },
     }
 }
+
+impl TableDirectory {
+    /// Decompress the correcponding table.
+    pub fn decompress<T: Tape>(&self, mut tape: T) -> Result<()> {
+        let size = self.iter().map(|record| record.uncompressed_size()).sum();
+        let mut data = Vec::with_capacity(size);
+        brotli_decompressor::BrotliDecompress(&mut tape, &mut data)?;
+        Ok(())
+    }
+}
+
+dereference! { TableDirectory::records => [Record] }
 
 impl Walue<'static> for TableDirectory {
     type Parameter = usize;
@@ -53,14 +65,20 @@ impl Walue<'static> for TableDirectory {
 impl Record {
     /// Return the tag.
     pub fn tag(&self) -> Tag {
-        println!("{:?}", self);
         self.tag.unwrap_or_else(|| Tag(*map(self.flags & TAG_MASK)))
     }
 
-    /// Return the transformation version
+    /// Return the transformation.
     #[inline]
     pub fn transformation(&self) -> u8 {
         self.flags.wrapping_shr(6)
+    }
+
+    /// Return the size of the uncompressed data.
+    pub fn uncompressed_size(&self) -> usize {
+        self.uncompressed_transformed_size
+            .unwrap_or(self.uncompressed_untransformed_size)
+            .0 as usize
     }
 }
 

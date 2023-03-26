@@ -23,5 +23,23 @@ mod noto_naskh_arabic {
                 "fvar", "head", "hhea", "hmtx", "maxp", "name", "post",
             ]
         );
+        let transformations = table
+            .records
+            .iter()
+            .map(|record| record.transformation())
+            .collect::<Vec<_>>();
+        assert_eq!(
+            transformations,
+            &[0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0],
+        );
+    }
+
+    #[test]
+    #[should_panic]
+    fn decompress() {
+        let mut tape = setup!(NotoNaskhArabic);
+        let table = ok!(FileHeader::read(&mut tape));
+        let table = ok!(TableDirectory::read(&mut tape, table.table_count as usize));
+        ok!(table.decompress(tape));
     }
 }

@@ -42,11 +42,11 @@ table! {
 
 impl TableDirectory {
     /// Decompress all tables.
-    pub fn decompress<T: Tape>(&self, mut tape: T) -> Result<()> {
+    pub fn decompress<T: Tape>(&self, mut tape: T) -> Result<Vec<u8>> {
         let size = self.iter().map(|record| record.uncompressed_size()).sum();
         let mut data = Vec::with_capacity(size);
         brotli_decompressor::BrotliDecompress(&mut tape, &mut data)?;
-        Ok(())
+        Ok(data)
     }
 }
 

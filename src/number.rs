@@ -54,5 +54,6 @@ mod tests {
         test!(&[0], 0);
         test!(&[0x3F], 63);
         test!(&[0x81, 0], 128);
+        test!(&[0x8F, 0xFF, 0xFF, 0xFF, 0x7F], 4294967295);
     }
 }

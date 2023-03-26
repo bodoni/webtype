@@ -19,23 +19,14 @@ mod noto_naskh_arabic {
         assert_eq!(
             tags,
             &[
-                "GDEF", "GPOS", "GSUB", "OS/2", "cmap", "cvt ", "fpgm", "gasp", "glyf", "glyf",
-                "fvar", "head", "hhea", "hmtx", "maxp", "name", "post",
+                "GDEF", "GPOS", "GSUB", "OS/2", "cmap", "cvt ", "fpgm", "gasp", "glyf", "loca",
+                "head", "hhea", "hmtx", "maxp", "name", "post", "prep",
             ]
         );
-        let transformations = table
-            .records
-            .iter()
-            .map(|record| record.transformation())
-            .collect::<Vec<_>>();
-        assert_eq!(
-            transformations,
-            &[0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0],
-        );
+        assert!(table.records.iter().all(|record| record.transformation() == 0));
     }
 
     #[test]
-    #[should_panic]
     fn decompress() {
         let mut tape = setup!(NotoNaskhArabic);
         let table = ok!(FileHeader::read(&mut tape));

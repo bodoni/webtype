@@ -21,7 +21,7 @@ table! {
         flags (u8), // flags
 
         tag (Option<Tag>) |this, tape| { // tag
-            if this.flags & TAG_MASK == 63 {
+            if this.is_arbitrary() {
                 Ok(Some(tape.take()?))
             } else {
                 Ok(None)
@@ -31,7 +31,7 @@ table! {
         uncompressed_untransformed_size (v32), // origLength
 
         uncompressed_transformed_size (Option<v32>) |this, tape| { // transformLength
-            if this.flags & !TAG_MASK > 0 {
+            if this.is_transformed() {
                 Ok(Some(tape.take()?))
             } else {
                 Ok(None)
@@ -41,7 +41,7 @@ table! {
 }
 
 impl TableDirectory {
-    /// Decompress the correcponding table.
+    /// Decompress all tables.
     pub fn decompress<T: Tape>(&self, mut tape: T) -> Result<()> {
         let size = self.iter().map(|record| record.uncompressed_size()).sum();
         let mut data = Vec::with_capacity(size);
@@ -63,12 +63,20 @@ impl Walue<'static> for TableDirectory {
 }
 
 impl Record {
-    /// Return the tag.
+    /// Check if the table is transformed.
+    #[inline]
+    pub fn is_transformed(&self) -> bool {
+        let transformation = self.transformation();
+        matches!(self.tag().as_str(), Some("glyf") | Some("loca")) && transformation != 3
+            || transformation != 0
+    }
+
+    /// Return the tag of the table.
     pub fn tag(&self) -> Tag {
         self.tag.unwrap_or_else(|| Tag(*map(self.flags & TAG_MASK)))
     }
 
-    /// Return the transformation.
+    /// Return the transformation version.
     #[inline]
     pub fn transformation(&self) -> u8 {
         self.flags.wrapping_shr(6)
@@ -79,6 +87,11 @@ impl Record {
         self.uncompressed_transformed_size
             .unwrap_or(self.uncompressed_untransformed_size)
             .0 as usize
+    }
+
+    #[inline]
+    fn is_arbitrary(&self) -> bool {
+        self.flags & TAG_MASK == TAG_MASK
     }
 }
 

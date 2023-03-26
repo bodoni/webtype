@@ -14,7 +14,7 @@ table! {
         table_count                (u16), // numTables
         reserved                   (u16) = { 0 }, // reserved
         uncompressed_data_size     (u32), // totalSfntSize
-        ompressed_data_size        (u32), // totalCompressedSize
+        compressed_data_size       (u32), // totalCompressedSize
         major_version              (u16), // majorVersion
         minor_version              (u16), // minorVersion
         metadata_offset            (u32), // metaOffset

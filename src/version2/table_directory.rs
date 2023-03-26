@@ -29,7 +29,7 @@ table! {
         },
 
         uncompressed_size (v32), // origLength
-                                 //
+
         compressed_size (Option<v32>) |this, tape| { // transformLength
             if this.flags & !TAG_MASK > 0 {
                 Ok(Some(tape.take()?))

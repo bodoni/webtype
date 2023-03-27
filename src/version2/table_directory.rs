@@ -70,18 +70,10 @@ impl TableDirectory {
     }
 
     /// Decompress all tables.
-    pub fn decompress<T: Tape>(&self, mut tape: T, file_header: &FileHeader) -> Result<Vec<u8>> {
+    pub fn decompress<T: Tape>(&self, mut tape: T, _: &FileHeader) -> Result<Vec<u8>> {
         let size = self.iter().map(|record| record.uncompressed_size()).sum();
-        let position = tape.position()?;
         let mut data = Vec::with_capacity(size);
         brotli_decompressor::BrotliDecompress(&mut tape, &mut data)?;
-        let size = (tape.position()? - position) as usize;
-        if file_header.compressed_data_size as usize + 1 != size {
-            raise!(
-                "found malformed uncompressed data ({} != {size}",
-                file_header.compressed_data_size,
-            );
-        }
         Ok(data)
     }
 }

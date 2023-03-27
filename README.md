@@ -1,6 +1,8 @@
 # WebType [![Package][package-img]][package-url] [![Documentation][documentation-img]][documentation-url] [![Build][build-img]][build-url]
 
-The package provides a parser for fonts in Web Open Font Format.
+The package provides a parser for fonts in Web Open Font Format. It might be
+helpful to have a look at a higher-level parser called [`font`][font], which
+internally relies on this package.
 
 ## Example
 
@@ -23,6 +25,8 @@ assert_eq!(font_header.units_per_em, 2048);
 Your contribution is highly appreciated. Do not hesitate to open an issue or a
 pull request. Note that any contribution submitted for inclusion in the project
 will be licensed according to the terms given in [LICENSE.md](LICENSE.md).
+
+[font]: https://github.com/bodoni/font
 
 [build-img]: https://github.com/bodoni/webtype/workflows/build/badge.svg
 [build-url]: https://github.com/bodoni/webtype/actions/workflows/build.yml

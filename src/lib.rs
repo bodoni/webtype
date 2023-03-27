@@ -34,3 +34,9 @@ pub use typeface::{Error, Result, Tape, Value, Walue};
 
 pub use file::File;
 pub use number::v32;
+
+/// Check if a tag is recognized.
+#[inline]
+pub fn accept(tag: &opentype::truetype::Tag) -> bool {
+    matches!(&tag.0, b"wOFF" | b"wOF2")
+}

@@ -7,7 +7,7 @@ internally relies on this package.
 ## Example
 
 ```rust
-use opentype::truetype::FontHeader;
+use webtype::opentype::truetype::FontHeader;
 use webtype::File;
 
 macro_rules! ok(($result:expr) => ($result.unwrap()));

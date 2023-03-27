@@ -1,6 +1,23 @@
 # WebType [![Package][package-img]][package-url] [![Documentation][documentation-img]][documentation-url] [![Build][build-img]][build-url]
 
-The package provide a parser for fonts in Web Open Font Format.
+The package provides a parser for fonts in Web Open Font Format.
+
+## Example
+
+```rust
+use opentype::truetype::FontHeader;
+use webtype::File;
+
+macro_rules! ok(($result:expr) => ($result.unwrap()));
+
+let path = "NotoNaskhArabic-Regular.woff2";
+let mut tape = ok!(std::fs::File::open(path));
+let File { mut fonts, data } = ok!(File::read(&mut tape));
+let mut tape = std::io::Cursor::new(&data);
+
+let font_header = ok!(ok!(fonts[0].take::<_, FontHeader>(&mut tape)));
+assert_eq!(font_header.units_per_em, 2048);
+```
 
 ## Contribution
 

@@ -1,6 +1,6 @@
 use crate::{Result, Tape, Value};
 
-/// A variable-size u32.
+/// A four-byte unsigned integer with a variable-length encoding.
 #[allow(non_camel_case_types)]
 #[derive(Clone, Copy, Debug, Default)]
 pub struct v32(pub u32);

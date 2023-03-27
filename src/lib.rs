@@ -1,4 +1,22 @@
 //! Parser for fonts in Web Open Font Format.
+//!
+//! ## Example
+//!
+//! ```
+//! use opentype::truetype::FontHeader;
+//! use webtype::File;
+//!
+//! macro_rules! ok(($result:expr) => ($result.unwrap()));
+//!
+//! let path = "NotoNaskhArabic-Regular.woff2";
+//! # let path = "tests/fixtures/NotoNaskhArabic-Regular.woff2";
+//! let mut tape = ok!(std::fs::File::open(path));
+//! let File { mut fonts, data } = ok!(File::read(&mut tape));
+//! let mut tape = std::io::Cursor::new(&data);
+//!
+//! let font_header = ok!(ok!(fonts[0].take::<_, FontHeader>(&mut tape)));
+//! assert_eq!(font_header.units_per_em, 2048);
+//! ```
 
 pub extern crate opentype;
 
@@ -8,8 +26,11 @@ extern crate typeface;
 pub mod version1;
 pub mod version2;
 
+mod file;
 mod number;
 
+pub use opentype::Font;
 pub use typeface::{Error, Result, Tape, Value, Walue};
 
+pub use file::File;
 pub use number::v32;

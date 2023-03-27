@@ -12,8 +12,7 @@ macro_rules! ok(($result:expr) => ($result.unwrap()));
 
 let path = "NotoNaskhArabic-Regular.woff2";
 let mut tape = ok!(std::fs::File::open(path));
-let File { mut fonts, data } = ok!(File::read(&mut tape));
-let mut tape = std::io::Cursor::new(&data);
+let File { mut fonts, mut tape } = ok!(File::read(&mut tape));
 
 let font_header = ok!(ok!(fonts[0].take::<_, FontHeader>(&mut tape)));
 assert_eq!(font_header.units_per_em, 2048);

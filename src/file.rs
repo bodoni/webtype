@@ -1,3 +1,5 @@
+use std::io::Cursor;
+
 use opentype::truetype::Tag;
 use opentype::Font;
 
@@ -8,7 +10,7 @@ pub struct File {
     /// The fonts.
     pub fonts: Vec<Font>,
     /// The decompressed font data.
-    pub data: Vec<u8>,
+    pub tape: Cursor<Vec<u8>>,
 }
 
 impl File {
@@ -26,7 +28,7 @@ impl File {
         let (font, data) = read_version2(tape)?;
         Ok(File {
             fonts: vec![font],
-            data,
+            tape: Cursor::new(data),
         })
     }
 }

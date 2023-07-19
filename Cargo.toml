@@ -1,6 +1,6 @@
 [package]
 name = "webtype"
-version = "0.2.1"
+version = "0.3.0"
 edition = "2021"
 license = "Apache-2.0/MIT"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
@@ -14,5 +14,5 @@ keywords = ["font", "typeface", "typography", "woff", "woff2"]
 
 [dependencies]
 brotli-decompressor = "2"
-opentype = { version = "0.24.14", features = ["ignore-invalid-checksums"] }
+opentype = { version = "0.25.0", features = ["ignore-invalid-checksums"] }
 typeface = "0"

@@ -40,7 +40,7 @@ fn read_version2<T: Tape>(mut tape: T) -> Result<(Font, Vec<u8>)> {
 
     let file_header = FileHeader::read(&mut tape)?;
     let table_directory = TableDirectory::read(&mut tape, &file_header)?;
-    let offset_table = table_directory.as_offset_table(&file_header);
+    let offsets = table_directory.as_offsets(&file_header);
     let data = table_directory.decompress(&mut tape, &file_header)?;
-    Ok((Font { offset_table }, data))
+    Ok((Font { offsets }, data))
 }

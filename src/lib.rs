@@ -3,7 +3,7 @@
 //! ## Example
 //!
 //! ```
-//! use webtype::opentype::truetype::FontHeader;
+//! use webtype::opentype::truetype::tables::FontHeader;
 //! use webtype::File;
 //!
 //! macro_rules! ok(($result:expr) => ($result.unwrap()));

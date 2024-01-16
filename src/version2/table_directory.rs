@@ -2,7 +2,7 @@
 //!
 //! [1]: https://www.w3.org/TR/WOFF2/#table_dir_format
 
-use opentype::truetype::OffsetTable;
+use opentype::truetype::tables::Offsets;
 use opentype::truetype::Tag;
 
 use crate::number::v32;
@@ -44,10 +44,10 @@ table! {
 
 impl TableDirectory {
     /// Convert to an offset table.
-    pub fn as_offset_table(&self, file_header: &FileHeader) -> OffsetTable {
-        use opentype::truetype::offset_table::{Header, Record};
+    pub fn as_offsets(&self, file_header: &FileHeader) -> Offsets {
+        use opentype::truetype::tables::offsets::{Header, Record};
 
-        OffsetTable {
+        Offsets {
             header: Header {
                 version: file_header.flavor,
                 table_count: file_header.table_count,

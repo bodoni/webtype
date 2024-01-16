@@ -4,7 +4,7 @@ mod support;
 mod noto_naskh_arabic {
     use std::io::Cursor;
 
-    use webtype::opentype::truetype::FontHeader;
+    use webtype::opentype::truetype::tables::FontHeader;
     use webtype::opentype::Font;
     use webtype::version2::{FileHeader, TableDirectory};
     use webtype::{Value, Walue};
@@ -41,7 +41,7 @@ mod noto_naskh_arabic {
         let data = ok!(table.decompress(&mut tape, &file_header));
         let mut tape = Cursor::new(&data);
         let font = Font {
-            offset_table: table.as_offset_table(&file_header),
+            offsets: table.as_offsets(&file_header),
         };
         let table = ok!(ok!(font.take::<_, FontHeader>(&mut tape)));
         assert_eq!(table.major_version, 1);

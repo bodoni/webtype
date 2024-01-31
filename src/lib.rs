@@ -29,7 +29,7 @@ mod file;
 mod number;
 
 pub use opentype::Font;
-pub use typeface::{Error, Result, Tape, Value, Walue};
+pub use typeface::{tape, value, walue, Error, Result};
 
 pub use file::File;
 pub use number::v32;

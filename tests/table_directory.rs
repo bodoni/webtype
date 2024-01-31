@@ -6,8 +6,9 @@ mod noto_naskh_arabic {
 
     use webtype::opentype::truetype::tables::FontHeader;
     use webtype::opentype::Font;
+    use webtype::value::Read as ValueRead;
     use webtype::version2::{FileHeader, TableDirectory};
-    use webtype::{Value, Walue};
+    use webtype::walue::Read as WalueRead;
 
     #[test]
     fn read() {

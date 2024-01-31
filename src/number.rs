@@ -1,18 +1,18 @@
-use crate::{Result, Tape, Value};
+use crate::Result;
 
 /// A four-byte unsigned integer with a variable-length encoding.
 #[allow(non_camel_case_types)]
 #[derive(Clone, Copy, Debug, Default)]
 pub struct v32(pub u32);
 
-impl Value for v32 {
+impl crate::value::Read for v32 {
     #[inline]
-    fn read<T: Tape>(tape: &mut T) -> Result<Self> {
+    fn read<T: crate::tape::Read>(tape: &mut T) -> Result<Self> {
         Ok(v32(parse(tape)?))
     }
 }
 
-fn parse<T: Tape>(tape: &mut T) -> Result<u32> {
+fn parse<T: crate::tape::Read>(tape: &mut T) -> Result<u32> {
     let mut value: u32 = 0;
     for i in 0..5 {
         let byte: u32 = tape.take::<u8>()? as _;

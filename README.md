@@ -1,8 +1,8 @@
 # WebType [![Package][package-img]][package-url] [![Documentation][documentation-img]][documentation-url] [![Build][build-img]][build-url]
 
 The package provides a parser for fonts in Web Open Font Format. It might be
-helpful to have a look at a higher-level parser called [`font`][font], which
-internally relies on this package.
+helpful to have a look at a higher-level abstraction called [`font`][font],
+which internally relies on this package.
 
 ## Example
 

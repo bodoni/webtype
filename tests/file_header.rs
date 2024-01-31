@@ -2,8 +2,8 @@
 mod support;
 
 mod noto_naskh_arabic {
+    use webtype::value::Read;
     use webtype::version2::FileHeader;
-    use webtype::Value;
 
     #[test]
     fn read() {

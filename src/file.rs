@@ -3,7 +3,7 @@ use std::io::Cursor;
 use opentype::truetype::Tag;
 use opentype::Font;
 
-use crate::{Result, Tape, Value, Walue};
+use crate::Result;
 
 /// A file.
 pub struct File {
@@ -15,8 +15,10 @@ pub struct File {
 
 impl File {
     /// Read a file.
-    pub fn read<T: Tape>(tape: &mut T) -> Result<File> {
-        match Tape::peek::<(Tag, Tag)>(tape)? {
+    pub fn read<T: crate::tape::Read>(tape: &mut T) -> Result<File> {
+        use crate::tape::Read;
+
+        match Read::peek::<(Tag, Tag)>(tape)? {
             (tag, _) if tag.0 == *b"wOFF" => {
                 raise!("found version 1, which is not supported yet");
             }
@@ -35,8 +37,10 @@ impl File {
 
 dereference! { File::fonts => [Font] }
 
-fn read_version2<T: Tape>(mut tape: T) -> Result<(Font, Vec<u8>)> {
+fn read_version2<T: crate::tape::Read>(mut tape: T) -> Result<(Font, Vec<u8>)> {
+    use crate::value::Read as ValueRead;
     use crate::version2::{FileHeader, TableDirectory};
+    use crate::walue::Read as WalueRead;
 
     let file_header = FileHeader::read(&mut tape)?;
     let table_directory = TableDirectory::read(&mut tape, &file_header)?;

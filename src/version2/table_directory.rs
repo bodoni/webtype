@@ -7,7 +7,7 @@ use opentype::truetype::Tag;
 
 use crate::number::v32;
 use crate::version2::file_header::FileHeader;
-use crate::{Result, Tape, Walue};
+use crate::Result;
 
 const TAG_MASK: u8 = 0b0011_1111;
 
@@ -70,7 +70,7 @@ impl TableDirectory {
     }
 
     /// Decompress all tables.
-    pub fn decompress<T: Tape>(&self, mut tape: T, _: &FileHeader) -> Result<Vec<u8>> {
+    pub fn decompress<T: crate::tape::Read>(&self, mut tape: T, _: &FileHeader) -> Result<Vec<u8>> {
         let size = self.iter().map(|record| record.uncompressed_size()).sum();
         let mut data = Vec::with_capacity(size);
         brotli_decompressor::BrotliDecompress(&mut tape, &mut data)?;
@@ -80,10 +80,10 @@ impl TableDirectory {
 
 dereference! { TableDirectory::records => [Record] }
 
-impl<'l> Walue<'l> for TableDirectory {
+impl<'l> crate::walue::Read<'l> for TableDirectory {
     type Parameter = &'l FileHeader;
 
-    fn read<T: Tape>(tape: &mut T, file_header: &'l FileHeader) -> Result<Self> {
+    fn read<T: crate::tape::Read>(tape: &mut T, file_header: &'l FileHeader) -> Result<Self> {
         let records = tape.take_given(file_header.table_count as usize)?;
         Ok(TableDirectory { records })
     }
